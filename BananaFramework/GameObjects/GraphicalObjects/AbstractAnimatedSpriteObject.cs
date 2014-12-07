@@ -20,6 +20,10 @@ namespace BananaFramework.GameObjects.GraphicalObjects
 		protected float speedScale;
 		protected bool isStarted; // This is only false when the animation is first created
 
+		protected bool hasShadow;
+		protected float shadowDepth;
+		protected float shadowOpacity;
+
 		public AbstractAnimatedSpriteObject()
 		{
 			currentAnimation = null;
@@ -29,6 +33,9 @@ namespace BananaFramework.GameObjects.GraphicalObjects
 			isPaused = false;
 			speedScale = 1.0f;
 			isStarted = false;
+			hasShadow = false;
+			shadowDepth = 0.0f;
+			shadowOpacity = 0.2f;
 		}
 
 		public override void Update()
@@ -57,6 +64,15 @@ namespace BananaFramework.GameObjects.GraphicalObjects
 		{
 			Rectangle sourceRect = new Rectangle(currentFrame * currentAnimation.frameWidth, 0, currentAnimation.frameWidth, currentAnimation.frameHeight);
 			RenderManager.DrawQuad(currentAnimation.sheetKey, position, sourceRect, scale, depth, color, origin);
+
+			if (hasShadow)
+			{
+				for (int i = 0; i < currentAnimation.frameHeight; i++)
+				{
+					Rectangle shadowRect = new Rectangle(currentFrame * currentAnimation.frameWidth, currentAnimation.frameHeight - i - 1, currentAnimation.frameWidth, 1);
+					RenderManager.DrawQuad(currentAnimation.sheetKey, position - new Vector2(i + 1), shadowRect, scale, shadowDepth, Color.Black * shadowOpacity, origin);
+				}
+			}
 		}
 	}
 }

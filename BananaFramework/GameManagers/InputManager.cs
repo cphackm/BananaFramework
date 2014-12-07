@@ -75,7 +75,7 @@ namespace BananaFramework.GameManagers
 			return inputBindings[Key].isHeld;
 		}
 
-		public static void UpdateInputManager()
+		public static void Update()
 		{
 			keyboardState = Keyboard.GetState();
 
