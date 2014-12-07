@@ -41,7 +41,7 @@ namespace BananaFramework.GameManagers
 			return nextObjectId++;
 		}
 
-		public static void UpdateGameManager(GameTime gameTime)
+		public static void Update(GameTime gameTime)
 		{
 			CalculateDeltaTime(gameTime);
 		}

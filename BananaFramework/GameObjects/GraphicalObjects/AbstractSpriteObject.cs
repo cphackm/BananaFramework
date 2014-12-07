@@ -16,6 +16,7 @@ namespace BananaFramework.GameObjects.GraphicalObjects
 		protected float angle { set; get; }
 		protected Vector2 scale { set; get; }
 		protected Color color { set; get; }
+		protected float depth { set; get; }
 		protected RenderManager.BaseOriginKeys[] origin { set; get; }
 	}
 }

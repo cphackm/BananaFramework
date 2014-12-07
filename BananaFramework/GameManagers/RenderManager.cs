@@ -40,6 +40,8 @@ namespace BananaFramework.GameManagers
 		private static SpriteBatch spriteBatch;
 		private static Dictionary<string, Texture2D> textures;
 		private static Dictionary<string, Animation> animations;
+		private static Dictionary<string, RenderTarget2D> renderTargets;
+		private static Texture2D nextTexture;
 
 		public static void Initialize(GraphicsDevice Gd, ContentManager Cm)
 		{
@@ -48,6 +50,8 @@ namespace BananaFramework.GameManagers
 			spriteBatch = new SpriteBatch(gd);
 			textures = new Dictionary<string, Texture2D>();
 			animations = new Dictionary<string, Animation>();
+			renderTargets = new Dictionary<string, RenderTarget2D>();
+			nextTexture = null;
 		}
 
 		public static void LoadTexture(string TextureKey, string TexturePath)
@@ -67,9 +71,29 @@ namespace BananaFramework.GameManagers
 			}
 		}
 
+		public static void SetRenderTarget(string TargetKey)
+		{
+			gd.SetRenderTarget(TargetKey == null ? null : GetRenderTarget(TargetKey));
+		}
+
+		public static void SetTexture(string TextureKey)
+		{
+			nextTexture = GetTexture(TextureKey);
+		}
+
+		public static void SetTextureFromRenderTarget(string TargetKey)
+		{
+			nextTexture = GetRenderTarget(TargetKey);
+		}
+
 		public static Texture2D GetTexture(string TextureKey)
 		{
 			return textures[TextureKey];
+		}
+
+		public static RenderTarget2D GetRenderTarget(string TargetKey)
+		{
+			return renderTargets[TargetKey];
 		}
 
 		public static Animation GetAnimation(string AnimationKey)
@@ -135,9 +159,15 @@ namespace BananaFramework.GameManagers
 			return origin;
 		}
 
+		public static void CreateRenderTarget(String Key, int Width, int Height)
+		{
+			RenderTarget2D temp = new RenderTarget2D(gd, Width, Height);
+			renderTargets.Add(Key, temp);
+		}
+
 		public static void BeginRender()
 		{
-			spriteBatch.Begin();
+			spriteBatch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointClamp, null, null);
 		}
 
 		public static void EndRender()
@@ -145,32 +175,34 @@ namespace BananaFramework.GameManagers
 			spriteBatch.End();
 		}
 
-		public static void DrawQuad(string TextureKey, Vector2 Position, Vector2 Scale, BaseOriginKeys[] Origin)
+		public static void DrawQuad(string TextureKey, Vector2 Position, Vector2 Scale, float Depth, Color CColor, BaseOriginKeys[] Origin)
 		{
-			Texture2D texture = GetTexture(TextureKey);
+			Texture2D texture = TextureKey == null ? nextTexture : GetTexture(TextureKey);
 			Vector2 origin = CalculateOrigin(texture, Origin);
 
 			spriteBatch.Draw(
 				texture, 
 				position: Position, 
 				sourceRectangle: new Rectangle(0, 0, texture.Width, texture.Height), 
-				color: Color.White, 
+				color: CColor, 
 				scale: Scale, 
-				origin: origin);
+				origin: origin,
+				depth: Depth);
 		}
 
-		public static void DrawQuad(string TextureKey, Vector2 Position, Rectangle SourceRect, Vector2 Scale, BaseOriginKeys[] Origin)
+		public static void DrawQuad(string TextureKey, Vector2 Position, Rectangle SourceRect, Vector2 Scale, float Depth, Color CColor, BaseOriginKeys[] Origin)
 		{
-			Texture2D texture = GetTexture(TextureKey);
+			Texture2D texture = TextureKey == null ? nextTexture : GetTexture(TextureKey);
 			Vector2 origin = CalculateOrigin(SourceRect, Origin);
 
 			spriteBatch.Draw(
 				texture,
 				position: Position,
 				sourceRectangle: SourceRect,
-				color: Color.White,
+				color: CColor,
 				scale: Scale,
-				origin: origin);
+				origin: origin,
+				depth: Depth);
 		}
 	}
 }

@@ -18,6 +18,13 @@ namespace BananaFramework.GameLevels
 		protected List<AbstractGameObject> objects;
 		protected Dictionary<Type, List<AbstractGameObject>> objectsByType;
 
+		public AbstractGameLevel()
+		{
+			levelStates = new Dictionary<string, object>();
+			objects = new List<AbstractGameObject>();
+			objectsByType = new Dictionary<Type, List<AbstractGameObject>>();
+		}
+
 		public void SetLevelState(string Key, object Value)
 		{
 			if (levelStates.ContainsKey(Key))
@@ -38,6 +45,7 @@ namespace BananaFramework.GameLevels
 		public virtual bool RegisterGameObject(AbstractGameObject GameObject)
 		{
 			GameObject.id = GameManagers.GameManager.GetNextObjectId();
+			GameObject.level = this;
 			objects.Add(GameObject);
 
 			Type objType = GameObject.GetType();

@@ -56,7 +56,7 @@ namespace BananaFramework.GameObjects.GraphicalObjects
 		public override void Render()
 		{
 			Rectangle sourceRect = new Rectangle(currentFrame * currentAnimation.frameWidth, 0, currentAnimation.frameWidth, currentAnimation.frameHeight);
-			RenderManager.DrawQuad(currentAnimation.sheetKey, position, sourceRect, scale, origin);
+			RenderManager.DrawQuad(currentAnimation.sheetKey, position, sourceRect, scale, depth, color, origin);
 		}
 	}
 }
