@@ -50,7 +50,7 @@ namespace BananaFramework.Chunks.Structural
 			timers.Add(RTimer);
 		}
 
-		public virtual bool RegisterGameObject(AbstractGameObject GameObject)
+		public virtual bool RegisterGameObject(AbstractGameObject GameObject, bool DeepType = false)
 		{
 			GameObject.id = Managers.GameManager.GetNextObjectId();
 			GameObject.level = this;
@@ -58,9 +58,23 @@ namespace BananaFramework.Chunks.Structural
 
 			Type objType = GameObject.GetType();
 
-			if (!objectsByType.ContainsKey(objType))
+			if (DeepType)
 			{
-				objectsByType.Add(objType, new List<AbstractGameObject>());
+				while (objType != typeof(Object))
+				{
+					if (!objectsByType.ContainsKey(objType))
+					{
+						objectsByType.Add(objType, new List<AbstractGameObject>());
+					}
+					objType = objType.BaseType;
+				}
+			}
+			else
+			{
+				if (!objectsByType.ContainsKey(objType))
+				{
+					objectsByType.Add(objType, new List<AbstractGameObject>());
+				}
 			}
 
 			objectsByType[objType].Add(GameObject);
