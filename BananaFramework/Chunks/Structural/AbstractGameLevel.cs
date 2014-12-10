@@ -60,12 +60,15 @@ namespace BananaFramework.Chunks.Structural
 
 			if (DeepType)
 			{
-				while (objType != typeof(Object))
+				while (objType != typeof(AbstractGameObject))
 				{
 					if (!objectsByType.ContainsKey(objType))
 					{
 						objectsByType.Add(objType, new List<AbstractGameObject>());
 					}
+
+					objectsByType[objType].Add(GameObject);
+
 					objType = objType.BaseType;
 				}
 			}
@@ -75,9 +78,9 @@ namespace BananaFramework.Chunks.Structural
 				{
 					objectsByType.Add(objType, new List<AbstractGameObject>());
 				}
-			}
 
-			objectsByType[objType].Add(GameObject);
+				objectsByType[objType].Add(GameObject);
+			}
 
 			return true;
 		}
@@ -89,7 +92,7 @@ namespace BananaFramework.Chunks.Structural
 
 		public virtual List<T> GetGameObjectsByType<T>() where T : AbstractGameObject
 		{
-			return objectsByType[typeof(T)].Cast<T>().ToList();
+			return objectsByType.ContainsKey(typeof(T)) ? objectsByType[typeof(T)].Cast<T>().ToList() : new List<T>();
 		}
 
 		public virtual void Update()
