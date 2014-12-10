@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Content;
 
 using BananaFramework.Managers;
 using BananaFramework.Chunks.Logical;
+using BananaFramework.Chunks.Support;
 
 namespace BananaFramework.Chunks.Structural
 {
@@ -15,12 +16,14 @@ namespace BananaFramework.Chunks.Structural
 	{
 		protected Dictionary<string, object> levelStates;
 
+		protected List<Timer> timers;
 		protected List<AbstractGameObject> objects;
 		protected Dictionary<Type, List<AbstractGameObject>> objectsByType;
 
 		public AbstractGameLevel()
 		{
 			levelStates = new Dictionary<string, object>();
+			timers = new List<Timer>();
 			objects = new List<AbstractGameObject>();
 			objectsByType = new Dictionary<Type, List<AbstractGameObject>>();
 		}
@@ -40,6 +43,11 @@ namespace BananaFramework.Chunks.Structural
 		public T GetLevelState<T>(string Key)
 		{
 			return (T)levelStates[Key];
+		}
+
+		public virtual void RegisterTimer(Timer RTimer)
+		{
+			timers.Add(RTimer);
 		}
 
 		public virtual bool RegisterGameObject(AbstractGameObject GameObject)
@@ -72,6 +80,10 @@ namespace BananaFramework.Chunks.Structural
 
 		public virtual void Update()
 		{
+			foreach (Timer t in timers)
+			{
+				t.Update();
+			}
 			foreach (AbstractGameObject ago in objects)
 			{
 				ago.Update();
