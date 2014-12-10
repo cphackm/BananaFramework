@@ -44,16 +44,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameChunks\Animation.cs" />
-    <Compile Include="GameLevels\AbstractGameLevel.cs" />
-    <Compile Include="GameManagers\GameManager.cs" />
-    <Compile Include="GameManagers\InputManager.cs" />
-    <Compile Include="GameManagers\RenderManager.cs" />
-    <Compile Include="GameObjects\AbstractGameObject.cs" />
-    <Compile Include="GameObjects\GraphicalObjects\AbstractAnimatedSpriteObject.cs" />
-    <Compile Include="GameObjects\GraphicalObjects\AbstractSpriteObject.cs" />
+    <Compile Include="Chunks\Support\Animation.cs" />
+    <Compile Include="Chunks\Structural\AbstractGameLevel.cs" />
+    <Compile Include="Managers\GameManager.cs" />
+    <Compile Include="Managers\InputManager.cs" />
+    <Compile Include="Managers\RenderManager.cs" />
+    <Compile Include="Chunks\Logical\AbstractGameObject.cs" />
+    <Compile Include="Chunks\Logical\AbstractAnimatedSpriteObject.cs" />
+    <Compile Include="Chunks\Logical\AbstractSpriteObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
