@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Chunks\Support\Animation.cs" />
     <Compile Include="Chunks\Structural\AbstractGameLevel.cs" />
+    <Compile Include="Helpers\Math.cs" />
     <Compile Include="Managers\GameManager.cs" />
     <Compile Include="Managers\InputManager.cs" />
     <Compile Include="Managers\RenderManager.cs" />
