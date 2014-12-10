@@ -8,9 +8,15 @@ using BananaFramework.Chunks.Logical;
 
 namespace BananaFramework.Chunks.Support
 {
+	/// <summary>
+	/// The Timer class represents a device to measure elapsed time over measured intervals.
+	/// </summary>
 	public class Timer : AbstractGameObject
 	{
 		protected float progress;
+		/// <summary>
+		/// Progress toward completion in seconds
+		/// </summary>
 		public float Progress
 		{
 			get
@@ -18,6 +24,9 @@ namespace BananaFramework.Chunks.Support
 				return progress;
 			}
 		}
+		/// <summary>
+		/// Progress toward completion as a value between 0 and 1
+		/// </summary>
 		public float NormalizedProgress
 		{
 			get
@@ -26,6 +35,9 @@ namespace BananaFramework.Chunks.Support
 			}
 		}
 		protected float length;
+		/// <summary>
+		/// The length of the timer in seconds
+		/// </summary>
 		public float Length
 		{
 			get
@@ -34,6 +46,9 @@ namespace BananaFramework.Chunks.Support
 			}
 		}
 		protected bool isRunning;
+		/// <summary>
+		/// True if the timer is currently running
+		/// </summary>
 		public bool IsRunning
 		{
 			get
@@ -42,6 +57,9 @@ namespace BananaFramework.Chunks.Support
 			}
 		}
 		protected bool isFinished;
+		/// <summary>
+		/// True on the frame when the timer finishes, false otherwise
+		/// </summary>
 		public bool IsFinished
 		{
 			get
@@ -50,6 +68,11 @@ namespace BananaFramework.Chunks.Support
 			}
 		}
 
+		/// <summary>
+		/// Constructs a new timer with designated length and start state
+		/// </summary>
+		/// <param name="Length">Length of the timer in seconds</param>
+		/// <param name="Start">Indicates whether or not the timer is started at creation</param>
 		public Timer(float Length, bool Start)
 		{
 			progress = 0.0f;
@@ -58,6 +81,9 @@ namespace BananaFramework.Chunks.Support
 			isFinished = false;
 		}
 
+		/// <summary>
+		/// Updates the timer
+		/// </summary>
 		public override void Update()
 		{
 			// isFinished should only be true on the frame that the timer finishes
@@ -74,8 +100,6 @@ namespace BananaFramework.Chunks.Support
 			}
 		}
 
-		public override void Render()
-		{
-		}
+		public override void Render() { }
 	}
 }

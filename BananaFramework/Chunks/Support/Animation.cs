@@ -9,6 +9,10 @@ using BananaFramework.Managers;
 
 namespace BananaFramework.Chunks.Support
 {
+	/// <summary>
+	/// The Animation class represents a single animation, encompassing associated image keys, 
+	/// frame information, etc.
+	/// </summary>
 	public class Animation
 	{
 		[XmlElement("name")]
@@ -32,8 +36,16 @@ namespace BananaFramework.Chunks.Support
 		[XmlArray("imagePoints")]
 		public List<int> imagePoints;
 
+		/// <summary>
+		/// Default constructor.
+		/// </summary>
 		public Animation() { }
 
+		/// <summary>
+		/// Loads animations from the specified XML file and returns them in a list.
+		/// </summary>
+		/// <param name="XmlPath">The path to the XML file from which to load animations.</param>
+		/// <returns></returns>
 		public static List<Animation> LoadAnimationsFromXml(string XmlPath)
 		{
 			// XML deserializer

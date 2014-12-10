@@ -10,6 +10,10 @@ using BananaFramework.Chunks.Support;
 
 namespace BananaFramework.Chunks.Logical
 {
+	/// <summary>
+	/// The AbstractAnimatedSpriteObject class represents an object that is equipped to 
+	/// automatically update and draw an animated sprite from loaded Animation class data.
+	/// </summary>
 	public abstract class AbstractAnimatedSpriteObject : AbstractSpriteObject
 	{
 		protected Animation currentAnimation;
@@ -24,6 +28,9 @@ namespace BananaFramework.Chunks.Logical
 		protected float shadowDepth;
 		protected float shadowOpacity;
 
+		/// <summary>
+		/// Constructs a new AbstractAnimatedSpriteObject with default values.
+		/// </summary>
 		public AbstractAnimatedSpriteObject()
 		{
 			currentAnimation = null;
@@ -38,6 +45,11 @@ namespace BananaFramework.Chunks.Logical
 			shadowOpacity = 0.2f;
 		}
 
+		/// <summary>
+		/// Updates the state of the currently playing animation, if applicable. This method should 
+		/// be called at the beginning of the Update() method in any deriving classes that choose 
+		/// to override it.
+		/// </summary>
 		public override void Update()
 		{
 			if (null != currentAnimation && !isPaused)
@@ -60,6 +72,10 @@ namespace BananaFramework.Chunks.Logical
 			}
 		}
 
+		/// <summary>
+		/// Renders the currently playing animation, if applicable. This method should be called at
+		/// the beginning of the Render() method in any deriving classes that choose to override it.
+		/// </summary>
 		public override void Render()
 		{
 			Rectangle sourceRect = new Rectangle(currentFrame * currentAnimation.frameWidth, 0, currentAnimation.frameWidth, currentAnimation.frameHeight);

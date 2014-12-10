@@ -10,6 +10,10 @@ using BananaFramework.Chunks.Structural;
 
 namespace BananaFramework.Chunks.Logical
 {
+	/// <summary>
+	/// The AbstractGameObject class acts as the base class for all logical objects that act as 
+	/// part of the game.
+	/// </summary>
 	public abstract class AbstractGameObject
 	{
 		public int id { get; set; }
