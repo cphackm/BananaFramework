@@ -60,7 +60,7 @@ namespace BananaFramework.Chunks.Structural
 
 			if (DeepType)
 			{
-				while (objType != typeof(AbstractGameObject))
+				while (objType != typeof(AbstractGameObject) && objType != typeof(AbstractAnimatedSpriteObject) && objType != typeof(AbstractSpriteObject))
 				{
 					if (!objectsByType.ContainsKey(objType))
 					{
