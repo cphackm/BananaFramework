@@ -20,6 +20,7 @@ namespace BananaFramework.Chunks.Structural
 	{
 		protected Dictionary<string, object> levelStates;
 
+		protected Vector2 scroll;
 		protected List<Timer> timers;
 		protected List<AbstractGameObject> objects;
 		protected Dictionary<Type, List<AbstractGameObject>> objectsByType;

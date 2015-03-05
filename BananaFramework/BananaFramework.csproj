@@ -47,6 +47,7 @@
     <Compile Include="Chunks\Support\Animation.cs" />
     <Compile Include="Chunks\Structural\AbstractGameLevel.cs" />
     <Compile Include="Chunks\Support\Timer.cs" />
+    <Compile Include="FloatRectangle.cs" />
     <Compile Include="Helpers\Math.cs" />
     <Compile Include="Managers\GameManager.cs" />
     <Compile Include="Managers\InputManager.cs" />

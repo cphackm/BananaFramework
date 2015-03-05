@@ -16,7 +16,11 @@ namespace BananaFramework.Chunks.Logical
 	/// </summary>
 	public abstract class AbstractSpriteObject : AbstractGameObject
 	{
-		protected Vector2 position { set; get; }
+		protected Vector2 position;
+		public Vector2 Position
+		{
+			get { return position; }
+		}
 		protected float angle { set; get; }
 		protected Vector2 scale { set; get; }
 		protected Color color { set; get; }

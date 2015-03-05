@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using BananaFramework.Managers;
 using BananaFramework.Chunks.Support;
@@ -21,6 +22,8 @@ namespace BananaFramework.Chunks.Logical
 		protected float frameTimer;
 		protected float timerTarget;
 		protected bool isPaused;
+		protected bool isFinished;
+		protected bool isMirrored;
 		protected float speedScale;
 		protected bool isStarted; // This is only false when the animation is first created
 
@@ -38,11 +41,26 @@ namespace BananaFramework.Chunks.Logical
 			frameTimer = 0.0f;
 			timerTarget = 0.0f;
 			isPaused = false;
+			isMirrored = false;
 			speedScale = 1.0f;
 			isStarted = false;
 			hasShadow = false;
 			shadowDepth = 0.0f;
 			shadowOpacity = 0.2f;
+			isFinished = false;
+		}
+
+		protected void SetAnimation(string Key, bool Restart)
+		{
+			Animation newAnim = RenderManager.GetAnimation(Key);
+			if (Restart || newAnim != currentAnimation)
+			{
+				currentFrame = 0;
+				frameTimer = 0.0f;
+				timerTarget = 0.0f;
+				isFinished = false;
+			}
+			currentAnimation = newAnim;
 		}
 
 		/// <summary>
@@ -59,15 +77,23 @@ namespace BananaFramework.Chunks.Logical
 				if (!isStarted)
 				{
 					isStarted = true;
-					timerTarget = currentAnimation.frameSpeeds[currentFrame];
+					timerTarget = currentAnimation.frameSpeeds[currentFrame] * 10.0f;
 				}
 
 				frameTimer += 1000.0f * dt * speedScale;
 				if (frameTimer >= timerTarget)
 				{
-					currentFrame = (currentFrame == (currentAnimation.frameCount - 1)) ? 0 : (currentFrame + 1);
-					timerTarget = currentAnimation.frameSpeeds[currentFrame];
-					frameTimer = 0.0f;
+					if (currentFrame == (currentAnimation.frameCount - 1) && !currentAnimation.isLooping)
+					{
+						isFinished = true;
+					}
+
+					if (!isFinished)
+					{
+						currentFrame = (currentFrame == (currentAnimation.frameCount - 1)) ? 0 : (currentFrame + 1);
+						timerTarget = currentAnimation.frameSpeeds[currentFrame] * 10.0f;
+						frameTimer = 0.0f;
+					}
 				}
 			}
 		}
@@ -78,15 +104,20 @@ namespace BananaFramework.Chunks.Logical
 		/// </summary>
 		public override void Render()
 		{
-			Rectangle sourceRect = new Rectangle(currentFrame * currentAnimation.frameWidth, 0, currentAnimation.frameWidth, currentAnimation.frameHeight);
-			RenderManager.DrawQuad(currentAnimation.sheetKey, position, sourceRect, scale, depth, color, origin);
-
-			if (hasShadow)
+			// Only render if there is an animation set
+			if (currentAnimation != null)
 			{
-				for (int i = 0; i < currentAnimation.frameHeight; i++)
+				Texture2D tex = RenderManager.GetTexture(currentAnimation.sheetKey);
+				Rectangle sourceRect = new Rectangle((currentFrame * currentAnimation.frameWidth) % tex.Width, (int)Math.Floor(currentFrame * currentAnimation.frameWidth / (double)tex.Width), currentAnimation.frameWidth, currentAnimation.frameHeight);
+				RenderManager.DrawQuad(currentAnimation.sheetKey, position, sourceRect, scale, depth, color, origin, isMirrored);
+
+				if (hasShadow)
 				{
-					Rectangle shadowRect = new Rectangle(currentFrame * currentAnimation.frameWidth, currentAnimation.frameHeight - i - 1, currentAnimation.frameWidth, 1);
-					RenderManager.DrawQuad(currentAnimation.sheetKey, position - new Vector2(i + 1), shadowRect, scale, shadowDepth, Color.Black * shadowOpacity, origin);
+					for (int i = 0; i < currentAnimation.frameHeight; i++)
+					{
+						Rectangle shadowRect = new Rectangle(currentFrame * currentAnimation.frameWidth, currentAnimation.frameHeight - i - 1, currentAnimation.frameWidth, 1);
+						RenderManager.DrawQuad(currentAnimation.sheetKey, position - new Vector2(i + 1), shadowRect, scale, shadowDepth, Color.Black * shadowOpacity, origin);
+					}
 				}
 			}
 		}

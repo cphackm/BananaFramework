@@ -46,6 +46,7 @@ namespace BananaFramework.Managers
 			public static BaseOriginKeys[] botRight = { BaseOriginKeys.bottom, BaseOriginKeys.right };
 		}
 
+		public static Vector2 scroll;
 		private static ContentManager cm;
 		private static GraphicsDevice gd;
 		private static SpriteBatch spriteBatch;
@@ -260,19 +261,20 @@ namespace BananaFramework.Managers
 		/// <param name="Depth">The Z depth to draw at.</param>
 		/// <param name="CColor">The color filter to apply.</param>
 		/// <param name="Origin">The origin to draw with.</param>
-		public static void DrawQuad(string TextureKey, Vector2 Position, Vector2 Scale, float Depth, Color CColor, BaseOriginKeys[] Origin)
+		public static void DrawQuad(string TextureKey, Vector2 Position, Vector2 Scale, float Depth, Color CColor, BaseOriginKeys[] Origin, bool Mirror = false, bool Scroll = true)
 		{
 			Texture2D texture = TextureKey == null ? nextTexture : GetTexture(TextureKey);
 			Vector2 origin = CalculateOrigin(texture, Origin);
 
 			spriteBatch.Draw(
 				texture, 
-				position: Position, 
+				position: Position - (Scroll ? scroll : Vector2.Zero), 
 				sourceRectangle: new Rectangle(0, 0, texture.Width, texture.Height), 
 				color: CColor, 
 				scale: Scale, 
 				origin: origin,
-				depth: Depth);
+				depth: Depth,
+				effect: Mirror ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
 		}
 
 		/// <summary>
@@ -285,19 +287,20 @@ namespace BananaFramework.Managers
 		/// <param name="Depth">The Z depth to draw at.</param>
 		/// <param name="CColor">The color filter to apply.</param>
 		/// <param name="Origin">The origin to draw with.</param>
-		public static void DrawQuad(string TextureKey, Vector2 Position, Rectangle SourceRect, Vector2 Scale, float Depth, Color CColor, BaseOriginKeys[] Origin)
+		public static void DrawQuad(string TextureKey, Vector2 Position, Rectangle SourceRect, Vector2 Scale, float Depth, Color CColor, BaseOriginKeys[] Origin, bool Mirror = false, bool Scroll = true)
 		{
 			Texture2D texture = TextureKey == null ? nextTexture : GetTexture(TextureKey);
 			Vector2 origin = CalculateOrigin(SourceRect, Origin);
 
 			spriteBatch.Draw(
 				texture,
-				position: Position,
+				position: Position - (Scroll ? scroll : Vector2.Zero),
 				sourceRectangle: SourceRect,
 				color: CColor,
 				scale: Scale,
 				origin: origin,
-				depth: Depth);
+				depth: Depth,
+				effect: Mirror ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
 		}
 	}
 }
