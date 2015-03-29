@@ -16,6 +16,14 @@ namespace BananaFramework.Chunks.Logical
 	/// </summary>
 	public abstract class AbstractGameObject
 	{
+		protected bool isDestroyed;
+		public bool IsDestroyed
+		{
+			get
+			{
+				return isDestroyed;
+			}
+		}
 		public int id { get; set; }
 		public AbstractGameLevel level { get; set; }
 

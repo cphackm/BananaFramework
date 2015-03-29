@@ -25,7 +25,6 @@ namespace BananaFramework.Chunks.Logical
 		protected bool isFinished;
 		protected bool isMirrored;
 		protected float speedScale;
-		protected bool isStarted; // This is only false when the animation is first created
 
 		protected bool hasShadow;
 		protected float shadowDepth;
@@ -43,7 +42,6 @@ namespace BananaFramework.Chunks.Logical
 			isPaused = false;
 			isMirrored = false;
 			speedScale = 1.0f;
-			isStarted = false;
 			hasShadow = false;
 			shadowDepth = 0.0f;
 			shadowOpacity = 0.2f;
@@ -55,12 +53,12 @@ namespace BananaFramework.Chunks.Logical
 			Animation newAnim = RenderManager.GetAnimation(Key);
 			if (Restart || newAnim != currentAnimation)
 			{
+				currentAnimation = newAnim;
 				currentFrame = 0;
 				frameTimer = 0.0f;
-				timerTarget = 0.0f;
+				timerTarget = currentAnimation.frameSpeeds[0] * 10.0f;
 				isFinished = false;
 			}
-			currentAnimation = newAnim;
 		}
 
 		/// <summary>
@@ -74,12 +72,6 @@ namespace BananaFramework.Chunks.Logical
 			{
 				float dt = GameManager.GetGlobalState<float>("DT");
 
-				if (!isStarted)
-				{
-					isStarted = true;
-					timerTarget = currentAnimation.frameSpeeds[currentFrame] * 10.0f;
-				}
-
 				frameTimer += 1000.0f * dt * speedScale;
 				if (frameTimer >= timerTarget)
 				{
@@ -90,9 +82,9 @@ namespace BananaFramework.Chunks.Logical
 
 					if (!isFinished)
 					{
+						frameTimer -= timerTarget;
 						currentFrame = (currentFrame == (currentAnimation.frameCount - 1)) ? 0 : (currentFrame + 1);
 						timerTarget = currentAnimation.frameSpeeds[currentFrame] * 10.0f;
-						frameTimer = 0.0f;
 					}
 				}
 			}
@@ -108,7 +100,7 @@ namespace BananaFramework.Chunks.Logical
 			if (currentAnimation != null)
 			{
 				Texture2D tex = RenderManager.GetTexture(currentAnimation.sheetKey);
-				Rectangle sourceRect = new Rectangle((currentFrame * currentAnimation.frameWidth) % tex.Width, (int)Math.Floor(currentFrame * currentAnimation.frameWidth / (double)tex.Width), currentAnimation.frameWidth, currentAnimation.frameHeight);
+				Rectangle sourceRect = new Rectangle((currentFrame * currentAnimation.frameWidth) % tex.Width, (int)Math.Floor(currentFrame * currentAnimation.frameWidth / (double)tex.Width) * currentAnimation.frameHeight, currentAnimation.frameWidth, currentAnimation.frameHeight);
 				RenderManager.DrawQuad(currentAnimation.sheetKey, position, sourceRect, scale, depth, color, origin, isMirrored);
 
 				if (hasShadow)

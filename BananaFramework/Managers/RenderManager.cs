@@ -27,7 +27,9 @@ namespace BananaFramework.Managers
 			left,
 			right,
 			bottom,
-			center
+			center,
+			centerX,
+			centerY
 		};
 
 		/// <summary>
@@ -35,10 +37,10 @@ namespace BananaFramework.Managers
 		/// </summary>
 		public struct OriginKeys
 		{
-			public static BaseOriginKeys[] top = { BaseOriginKeys.top };
-			public static BaseOriginKeys[] bottom = { BaseOriginKeys.bottom };
-			public static BaseOriginKeys[] left = { BaseOriginKeys.left };
-			public static BaseOriginKeys[] right = { BaseOriginKeys.right };
+			public static BaseOriginKeys[] top = { BaseOriginKeys.top, BaseOriginKeys.centerX };
+			public static BaseOriginKeys[] bottom = { BaseOriginKeys.bottom, BaseOriginKeys.centerX };
+			public static BaseOriginKeys[] left = { BaseOriginKeys.left, BaseOriginKeys.centerY };
+			public static BaseOriginKeys[] right = { BaseOriginKeys.right, BaseOriginKeys.centerY };
 			public static BaseOriginKeys[] center = { BaseOriginKeys.center };
 			public static BaseOriginKeys[] topLeft = { BaseOriginKeys.top, BaseOriginKeys.left };
 			public static BaseOriginKeys[] topRight = { BaseOriginKeys.top, BaseOriginKeys.right };
@@ -160,7 +162,7 @@ namespace BananaFramework.Managers
 		/// <param name="Texture">The key of the texture to calculate an origin for.</param>
 		/// <param name="Origin">The origin key to calculate an origin position from.</param>
 		/// <returns>The Vector2 defining the desired origin on Texture.</returns>
-		private static Vector2 CalculateOrigin(Texture2D Texture, BaseOriginKeys[] Origin)
+		public static Vector2 CalculateOrigin(Texture2D Texture, BaseOriginKeys[] Origin)
 		{
 			Vector2 origin = Vector2.Zero;
 
@@ -185,6 +187,14 @@ namespace BananaFramework.Managers
 				origin.X = Texture.Width / 2;
 				origin.Y = Texture.Height / 2;
 			}
+			if (Origin.Contains(BaseOriginKeys.centerX))
+			{
+				origin.X = Texture.Width / 2;
+			}
+			if (Origin.Contains(BaseOriginKeys.centerY))
+			{
+				origin.Y = Texture.Height / 2;
+			}
 
 			return origin;
 		}
@@ -195,7 +205,7 @@ namespace BananaFramework.Managers
 		/// <param name="SourceRect">The source rectangle to calculate an origin for.</param>
 		/// <param name="Origin">The origin key to calculate an origin position from.</param>
 		/// <returns>The Vector2 defining the desired origin on SourceRect.</returns>
-		private static Vector2 CalculateOrigin(Rectangle SourceRect, BaseOriginKeys[] Origin)
+		public static Vector2 CalculateOrigin(Rectangle SourceRect, BaseOriginKeys[] Origin)
 		{
 			Vector2 origin = Vector2.Zero;
 
@@ -220,6 +230,57 @@ namespace BananaFramework.Managers
 				origin.X = SourceRect.Width / 2;
 				origin.Y = SourceRect.Height / 2;
 			}
+			if (Origin.Contains(BaseOriginKeys.centerX))
+			{
+				origin.X = SourceRect.Width / 2;
+			}
+			if (Origin.Contains(BaseOriginKeys.centerY))
+			{
+				origin.Y = SourceRect.Height / 2;
+			}
+
+			return origin;
+		}
+
+		/// <summary>
+		/// Calculates the origin of a Vector2 as a Vector2 based on a given origin key.
+		/// </summary>
+		/// <param name="SourceRect">The source rectangle to calculate an origin for.</param>
+		/// <param name="Origin">The origin key to calculate an origin position from.</param>
+		/// <returns>The Vector2 defining the desired origin on SourceRect.</returns>
+		public static Vector2 CalculateOrigin(Vector2 SourceVector, BaseOriginKeys[] Origin)
+		{
+			Vector2 origin = Vector2.Zero;
+
+			if (Origin.Contains(BaseOriginKeys.top))
+			{
+				origin.Y = 0;
+			}
+			if (Origin.Contains(BaseOriginKeys.bottom))
+			{
+				origin.Y = SourceVector.Y;
+			}
+			if (Origin.Contains(BaseOriginKeys.left))
+			{
+				origin.X = 0;
+			}
+			if (Origin.Contains(BaseOriginKeys.right))
+			{
+				origin.X = SourceVector.X;
+			}
+			if (Origin.Contains(BaseOriginKeys.center))
+			{
+				origin.X = SourceVector.X / 2;
+				origin.Y = SourceVector.Y / 2;
+			}
+			if (Origin.Contains(BaseOriginKeys.centerX))
+			{
+				origin.X = SourceVector.X / 2;
+			}
+			if (Origin.Contains(BaseOriginKeys.centerY))
+			{
+				origin.Y = SourceVector.Y / 2;
+			}
 
 			return origin;
 		}
@@ -239,9 +300,9 @@ namespace BananaFramework.Managers
 		/// <summary>
 		/// Begins a SpriteBatch process to enable drawing of sprites.
 		/// </summary>
-		public static void BeginRender()
+		public static void BeginRender(BlendState BS = null)
 		{
-			spriteBatch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointClamp, null, null);
+			spriteBatch.Begin(SpriteSortMode.FrontToBack, BS, SamplerState.PointClamp, null, null);
 		}
 
 		/// <summary>
@@ -250,6 +311,11 @@ namespace BananaFramework.Managers
 		public static void EndRender()
 		{
 			spriteBatch.End();
+		}
+
+		public static void ClearCurrentTarget(Color ClearColor)
+		{
+			gd.Clear(ClearColor);
 		}
 
 		/// <summary>

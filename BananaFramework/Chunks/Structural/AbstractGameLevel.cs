@@ -20,6 +20,7 @@ namespace BananaFramework.Chunks.Structural
 	{
 		protected Dictionary<string, object> levelStates;
 
+		protected int width, height;
 		protected Vector2 scroll;
 		protected List<Timer> timers;
 		protected List<AbstractGameObject> objects;
@@ -117,6 +118,23 @@ namespace BananaFramework.Chunks.Structural
 			return true;
 		}
 
+		public virtual void UnregisterGameObject(AbstractGameObject GameObject)
+		{
+			objects.Remove(GameObject);
+
+			Type objType = GameObject.GetType();
+
+			while (objType != typeof(AbstractGameObject) && objType != typeof(AbstractAnimatedSpriteObject) && objType != typeof(AbstractSpriteObject))
+			{
+				if (objectsByType.ContainsKey(objType))
+				{
+					objectsByType[objType].Remove(GameObject);
+				}
+
+				objType = objType.BaseType;
+			}
+		}
+
 		/// <summary>
 		/// Searches for an AbstractGameObject with ID registered with this level.
 		/// </summary>
@@ -147,9 +165,19 @@ namespace BananaFramework.Chunks.Structural
 			{
 				t.Update();
 			}
+			List<AbstractGameObject> destroyedObjects = new List<AbstractGameObject>();
 			foreach (AbstractGameObject ago in objects)
 			{
 				ago.Update();
+
+				if (ago.IsDestroyed)
+				{
+					destroyedObjects.Add(ago);
+				}
+			}
+			foreach (AbstractGameObject ago in destroyedObjects)
+			{
+				UnregisterGameObject(ago);
 			}
 		}
 

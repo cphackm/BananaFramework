@@ -92,12 +92,31 @@ namespace BananaFramework.Chunks.Support
 			if (isRunning)
 			{
 				progress += dt;
+
+				if (progress >= length)
+				{
+					progress = length;
+					isFinished = true;
+					isRunning = false;
+				}
 			}
-			if (progress >= length)
-			{
-				progress = length;
-				isFinished = true;
-			}
+		}
+
+		public void Restart(bool Start)
+		{
+			progress = 0.0f;
+			isRunning = Start;
+			isFinished = true;
+		}
+
+		public void Start()
+		{
+			isRunning = true;
+		}
+
+		public void Stop()
+		{
+			isRunning = false;
 		}
 
 		public override void Render() { }

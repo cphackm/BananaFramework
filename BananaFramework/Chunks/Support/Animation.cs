@@ -28,6 +28,11 @@ namespace BananaFramework.Chunks.Support
 		[XmlElement("frameHeight")]
 		public int frameHeight;
 
+		[XmlElement("originX")]
+		public int originX;
+		[XmlElement("originY")]
+		public int originY;
+
 		[XmlElement("frameCount")]
 		public int frameCount;
 		[XmlArray("frameSpeeds")]
