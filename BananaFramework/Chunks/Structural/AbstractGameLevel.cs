@@ -32,6 +32,14 @@ namespace BananaFramework.Chunks.Structural
 		/// </summary>
 		public AbstractGameLevel()
 		{
+			InitializeBase();
+		}
+
+		/// <summary>
+		/// Used to initialize all properties of the base AbstractGameClass.
+		/// </summary>
+		protected void InitializeBase()
+		{
 			levelStates = new Dictionary<string, object>();
 			timers = new List<Timer>();
 			objects = new List<AbstractGameObject>();

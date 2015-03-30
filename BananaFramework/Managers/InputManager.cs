@@ -89,7 +89,15 @@ namespace BananaFramework.Managers
 		/// <param name="GPlayerIndex">The index of the player to use for the gamepad button binding.</param>
 		public static void BindInputs(string Key, Keys KeyboardKey, Buttons GamePadButton, PlayerIndex GPlayerIndex)
 		{
-			inputBindings.Add(Key, new InputBinding(KeyboardKey, GamePadButton, GPlayerIndex));
+			// Ensure that these bindings haven't been added already
+			if (!inputBindings.ContainsKey(Key))
+			{
+				inputBindings.Add(Key, new InputBinding(KeyboardKey, GamePadButton, GPlayerIndex));
+			}
+			else
+			{
+				inputBindings[Key] = new InputBinding(KeyboardKey, GamePadButton, GPlayerIndex);
+			}
 		}
 
 		/// <summary>
