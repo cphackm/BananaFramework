@@ -51,6 +51,7 @@
     <Compile Include="Helpers\Math.cs" />
     <Compile Include="Managers\GameManager.cs" />
     <Compile Include="Managers\InputManager.cs" />
+    <Compile Include="Managers\LevelManager.cs" />
     <Compile Include="Managers\RenderManager.cs" />
     <Compile Include="Chunks\Logical\AbstractGameObject.cs" />
     <Compile Include="Chunks\Logical\AbstractAnimatedSpriteObject.cs" />

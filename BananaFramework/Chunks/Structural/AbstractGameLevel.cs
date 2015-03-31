@@ -22,6 +22,13 @@ namespace BananaFramework.Chunks.Structural
 
 		protected int width, height;
 		protected Vector2 scroll;
+		public Vector2 Scroll
+		{
+			get
+			{
+				return scroll;
+			}
+		}
 		protected List<Timer> timers;
 		protected List<AbstractGameObject> objects;
 		protected Dictionary<Type, List<AbstractGameObject>> objectsByType;
