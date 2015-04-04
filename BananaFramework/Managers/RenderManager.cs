@@ -54,6 +54,7 @@ namespace BananaFramework.Managers
 		private static SpriteBatch spriteBatch;
 		private static Dictionary<string, Texture2D> textures;
 		private static Dictionary<string, Animation> animations;
+		private static Dictionary<string, SpriteFont> fonts;
 		private static Dictionary<string, RenderTarget2D> renderTargets;
 		private static Texture2D nextTexture;
 
@@ -69,6 +70,7 @@ namespace BananaFramework.Managers
 			spriteBatch = new SpriteBatch(gd);
 			textures = new Dictionary<string, Texture2D>();
 			animations = new Dictionary<string, Animation>();
+			fonts = new Dictionary<string, SpriteFont>();
 			renderTargets = new Dictionary<string, RenderTarget2D>();
 			nextTexture = null;
 		}
@@ -96,6 +98,19 @@ namespace BananaFramework.Managers
 			foreach (Animation a in tempAnimations)
 			{
 				animations.Add(a.name, a);
+			}
+		}
+
+		/// <summary>
+		/// Loads a font and associates it with a string key.
+		/// </summary>
+		/// <param name="FontKey">The key to associate with the new font.</param>
+		/// <param name="FontPath">The path of the font to load.</param>
+		public static void LoadFont(string FontKey, string FontPath)
+		{
+			if (null != cm)
+			{
+				fonts.Add(FontKey, cm.Load<SpriteFont>(FontPath));
 			}
 		}
 
@@ -134,6 +149,11 @@ namespace BananaFramework.Managers
 		public static Texture2D GetTexture(string TextureKey)
 		{
 			return textures[TextureKey];
+		}
+
+		public static SpriteFont GetFont(string FontKey)
+		{
+			return fonts[FontKey];
 		}
 
 		/// <summary>
@@ -367,6 +387,23 @@ namespace BananaFramework.Managers
 				origin: origin,
 				depth: Depth,
 				effect: Mirror ? SpriteEffects.FlipHorizontally : SpriteEffects.None);
+		}
+
+		/// <summary>
+		/// Draws a string
+		/// </summary>
+		/// /// <param name="SString">String to draw.</param>
+		/// <param name="FontKey">Key associated with the desired font.</param>
+		/// <param name="Position">Position to draw the string at.</param>
+		/// <param name="Depth">The Z depth to draw at.</param>
+		/// <param name="CColor">Color to draw the font with.</param>
+		/// <param name="Origin">Origin to draw the string at.</param>
+		/// <param name="Scroll">Enables or disables scrolling for this string.</param>
+		public static void DrawString(string SString, string FontKey, Vector2 Position, float Depth, Color CColor, BaseOriginKeys[] Origin, bool Scroll = true)
+		{
+			SpriteFont font = GetFont(FontKey);
+			Vector2 stringSize = font.MeasureString(SString);
+			spriteBatch.DrawString(font, SString, Position, CColor, 0.0f, CalculateOrigin(stringSize, Origin), 1.0f, SpriteEffects.None, Depth);
 		}
 	}
 }
