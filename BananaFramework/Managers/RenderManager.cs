@@ -395,15 +395,16 @@ namespace BananaFramework.Managers
 		/// /// <param name="SString">String to draw.</param>
 		/// <param name="FontKey">Key associated with the desired font.</param>
 		/// <param name="Position">Position to draw the string at.</param>
+		/// <param name="Scale">The scale to draw at, 1 being natural size.</param>
 		/// <param name="Depth">The Z depth to draw at.</param>
 		/// <param name="CColor">Color to draw the font with.</param>
 		/// <param name="Origin">Origin to draw the string at.</param>
 		/// <param name="Scroll">Enables or disables scrolling for this string.</param>
-		public static void DrawString(string SString, string FontKey, Vector2 Position, float Depth, Color CColor, BaseOriginKeys[] Origin, bool Scroll = true)
+		public static void DrawString(string SString, string FontKey, Vector2 Position, float Scale, float Depth, Color CColor, BaseOriginKeys[] Origin, bool Scroll = true)
 		{
 			SpriteFont font = GetFont(FontKey);
 			Vector2 stringSize = font.MeasureString(SString);
-			spriteBatch.DrawString(font, SString, Position, CColor, 0.0f, CalculateOrigin(stringSize, Origin), 1.0f, SpriteEffects.None, Depth);
+			spriteBatch.DrawString(font, SString, Position, CColor, 0.0f, CalculateOrigin(stringSize, Origin), Scale, SpriteEffects.None, Depth);
 		}
 	}
 }
