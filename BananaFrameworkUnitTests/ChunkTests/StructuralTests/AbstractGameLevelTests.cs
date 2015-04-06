@@ -16,7 +16,6 @@ namespace BananaFrameworkUnitTests.ChunkTests.StructuralTests
 	{
 		public override void Update() { }
 		public override void Render() { }
-
 	}
 	[TestClass]
 	public class AbstractGameLevelTests

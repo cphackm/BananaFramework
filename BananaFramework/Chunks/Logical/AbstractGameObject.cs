@@ -27,6 +27,7 @@ namespace BananaFramework.Chunks.Logical
 		public int id { get; set; }
 		public AbstractGameLevel level { get; set; }
 
+		public virtual void OnRegisteredByLevel() { }
 		public abstract void Update();
 		public abstract void Render();
 	}

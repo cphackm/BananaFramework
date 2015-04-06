@@ -102,6 +102,7 @@ namespace BananaFramework.Chunks.Structural
 		{
 			GameObject.id = Managers.GameManager.GetNextObjectId();
 			GameObject.level = this;
+			GameObject.OnRegisteredByLevel();
 			objects.Add(GameObject);
 
 			Type objType = GameObject.GetType();
