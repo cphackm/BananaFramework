@@ -106,7 +106,7 @@ namespace BananaFramework.Chunks.Support
 		{
 			progress = 0.0f;
 			isRunning = Start;
-			isFinished = true;
+			isFinished = false;
 		}
 
 		public void Start()
