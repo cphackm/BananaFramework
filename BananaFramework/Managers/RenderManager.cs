@@ -404,7 +404,7 @@ namespace BananaFramework.Managers
 		{
 			SpriteFont font = GetFont(FontKey);
 			Vector2 stringSize = font.MeasureString(SString);
-			spriteBatch.DrawString(font, SString, Position, CColor, 0.0f, CalculateOrigin(stringSize, Origin), Scale, SpriteEffects.None, Depth);
+			spriteBatch.DrawString(font, SString, Position - (Scroll ? scroll : Vector2.Zero), CColor, 0.0f, CalculateOrigin(stringSize, Origin), Scale, SpriteEffects.None, Depth);
 		}
 	}
 }
