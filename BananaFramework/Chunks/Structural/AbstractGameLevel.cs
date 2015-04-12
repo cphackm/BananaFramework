@@ -30,6 +30,8 @@ namespace BananaFramework.Chunks.Structural
 			}
 		}
 		protected List<Timer> timers;
+		protected bool isInUpdatePhase;
+		protected List<Tuple<AbstractGameObject, Boolean>> objectBuffer;
 		protected List<AbstractGameObject> objects;
 		protected Dictionary<Type, List<AbstractGameObject>> objectsByType;
 
@@ -49,6 +51,7 @@ namespace BananaFramework.Chunks.Structural
 		{
 			levelStates = new Dictionary<string, object>();
 			timers = new List<Timer>();
+			objectBuffer = new List<Tuple<AbstractGameObject, bool>>();
 			objects = new List<AbstractGameObject>();
 			objectsByType = new Dictionary<Type, List<AbstractGameObject>>();
 		}
@@ -100,16 +103,30 @@ namespace BananaFramework.Chunks.Structural
 		/// <returns>True if no errors occur.</returns>
 		public virtual bool RegisterGameObject(AbstractGameObject GameObject, bool DeepType = false)
 		{
-			GameObject.id = Managers.GameManager.GetNextObjectId();
-			GameObject.level = this;
-			GameObject.OnRegisteredByLevel();
-			objects.Add(GameObject);
-
-			Type objType = GameObject.GetType();
-
-			if (DeepType)
+			if (!isInUpdatePhase)
 			{
-				while (objType != typeof(AbstractGameObject) && objType != typeof(AbstractAnimatedSpriteObject) && objType != typeof(AbstractSpriteObject))
+				GameObject.id = Managers.GameManager.GetNextObjectId();
+				GameObject.level = this;
+				GameObject.OnRegisteredByLevel();
+				objects.Add(GameObject);
+
+				Type objType = GameObject.GetType();
+
+				if (DeepType)
+				{
+					while (objType != typeof(AbstractGameObject) && objType != typeof(AbstractAnimatedSpriteObject) && objType != typeof(AbstractSpriteObject))
+					{
+						if (!objectsByType.ContainsKey(objType))
+						{
+							objectsByType.Add(objType, new List<AbstractGameObject>());
+						}
+
+						objectsByType[objType].Add(GameObject);
+
+						objType = objType.BaseType;
+					}
+				}
+				else
 				{
 					if (!objectsByType.ContainsKey(objType))
 					{
@@ -117,18 +134,11 @@ namespace BananaFramework.Chunks.Structural
 					}
 
 					objectsByType[objType].Add(GameObject);
-
-					objType = objType.BaseType;
 				}
 			}
 			else
 			{
-				if (!objectsByType.ContainsKey(objType))
-				{
-					objectsByType.Add(objType, new List<AbstractGameObject>());
-				}
-
-				objectsByType[objType].Add(GameObject);
+				objectBuffer.Add(new Tuple<AbstractGameObject, Boolean>(GameObject, DeepType));
 			}
 
 			return true;
@@ -182,6 +192,7 @@ namespace BananaFramework.Chunks.Structural
 				t.Update();
 			}
 			List<AbstractGameObject> destroyedObjects = new List<AbstractGameObject>();
+			isInUpdatePhase = true;
 			foreach (AbstractGameObject ago in objects)
 			{
 				ago.Update();
@@ -191,6 +202,12 @@ namespace BananaFramework.Chunks.Structural
 					destroyedObjects.Add(ago);
 				}
 			}
+			isInUpdatePhase = false;
+			foreach (Tuple<AbstractGameObject, Boolean> t in objectBuffer)
+			{
+				RegisterGameObject(t.Item1, DeepType: t.Item2);
+			}
+			objectBuffer.Clear();
 			foreach (AbstractGameObject ago in destroyedObjects)
 			{
 				UnregisterGameObject(ago);
