@@ -27,7 +27,10 @@ namespace BananaFramework.Managers
 
 		public static void SetLevel(string Key)
 		{
-			currentLevel = levels[Key];
+			if (levels.ContainsKey(Key))
+			{
+				currentLevel = levels[Key];
+			}
 		}
 
 		public static void RegisterLevel(string Key, AbstractGameLevel Level)
